@@ -568,9 +568,7 @@ void CephContext::do_command(std::string_view command, const cmdmap_t& cmdmap,
 		         << "result is " << out->length() << " bytes" << dendl;
 }
 
-CephContext::CephContext(uint32_t module_type_,
-                         enum code_environment_t code_env,
-                         int init_flags_)
+CephContext::CephContext(uint32_t module_type_, enum code_environment_t code_env, int init_flags_)
   : nref(1),
     _conf{code_env == CODE_ENVIRONMENT_DAEMON},
     _log(NULL),

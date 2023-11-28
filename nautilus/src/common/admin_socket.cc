@@ -229,8 +229,7 @@ void AdminSocket::entry() noexcept
       if (err == EINTR) {
 	      continue;
       }
-      lderr(m_cct) << "AdminSocket: poll(2) error: '"
-		               << cpp_strerror(err) << dendl;
+      lderr(m_cct) << "AdminSocket: poll(2) error: '" << cpp_strerror(err) << dendl;
       return;
     }
 

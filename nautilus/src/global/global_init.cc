@@ -81,11 +81,10 @@ static int chown_path(const std::string &pathname, const uid_t owner, const gid_
   return r;
 }
 
-void global_pre_init(
-  const std::map<std::string,std::string> *defaults,
-  std::vector < const char* >& args,
-  uint32_t module_type, code_environment_t code_env,
-  int flags)
+void global_pre_init(const std::map<std::string,std::string> *defaults,
+                     std::vector < const char* >& args,
+                     uint32_t module_type, code_environment_t code_env,
+                     int flags)
 {
   std::string conf_file_list;
   std::string cluster = "";
@@ -102,8 +101,7 @@ void global_pre_init(
   global_init_set_globals(cct);
   auto& conf = cct->_conf;
 
-  if (flags & (CINIT_FLAG_NO_DEFAULT_CONFIG_FILE|
-	       CINIT_FLAG_NO_MON_CONFIG)) {
+  if (flags & (CINIT_FLAG_NO_DEFAULT_CONFIG_FILE | CINIT_FLAG_NO_MON_CONFIG)) {
     conf->no_mon_config = true;
   }
 
@@ -114,8 +112,7 @@ void global_pre_init(
     }
   }
 
-  int ret = conf.parse_config_files(c_str_or_null(conf_file_list),
-				    &cerr, flags);
+  int ret = conf.parse_config_files(c_str_or_null(conf_file_list), &cerr, flags);
   if (ret == -EDOM) {
     cct->_log->flush();
     cerr << "global_init: error parsing config file." << std::endl;
@@ -199,15 +196,13 @@ global_init(const std::map<std::string,std::string> *defaults,
   // consider --setuser root a no-op, even if we're not root
   if (getuid() != 0) {
     if (g_conf()->setuser.length()) {
-      cerr << "ignoring --setuser " << g_conf()->setuser << " since I am not root"
-	   << std::endl;
+      cerr << "ignoring --setuser " << g_conf()->setuser << " since I am not root" << std::endl;
     }
     if (g_conf()->setgroup.length()) {
       cerr << "ignoring --setgroup " << g_conf()->setgroup
 	   << " since I am not root" << std::endl;
     }
-  } else if (g_conf()->setgroup.length() ||
-             g_conf()->setuser.length()) {
+  } else if (g_conf()->setgroup.length() || g_conf()->setuser.length()) {
     uid_t uid = 0;  // zero means no change; we can only drop privs here.
     gid_t gid = 0;
     std::string uid_string;

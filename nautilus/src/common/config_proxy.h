@@ -37,9 +37,7 @@ class ConfigProxy {
     ceph::mutex lock;
     ceph::condition_variable cond;
   public:
-    CallGate()
-      : lock(ceph::make_mutex("call::gate::lock")) {
-    }
+    CallGate(): lock(ceph::make_mutex("call::gate::lock")) {}
 
     void enter() {
       std::lock_guard<ceph::mutex> locker(lock);
@@ -306,11 +304,9 @@ public:
     std::lock_guard l{lock};
     return config.parse_argv(values, obs_mgr, args, level);
   }
-  int parse_config_files(const char *conf_files,
-			 std::ostream *warnings, int flags) {
+  int parse_config_files(const char *conf_files, std::ostream *warnings, int flags) {
     std::lock_guard l{lock};
-    return config.parse_config_files(values, obs_mgr,
-				     conf_files, warnings, flags);
+    return config.parse_config_files(values, obs_mgr, conf_files, warnings, flags);
   }
   size_t num_parse_errors() const {
     return config.parse_errors.size();

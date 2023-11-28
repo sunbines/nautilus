@@ -83,6 +83,7 @@ public:
   set_value_result_t set_value(const std::string& key,
                                Option::value_t&& value,
                                int level);
+
   int rm_val(const std::string& key, int level);
   void set_logging(int which, const char* val);
   /**

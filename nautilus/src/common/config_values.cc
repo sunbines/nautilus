@@ -57,8 +57,7 @@ ConfigValues::get_value(const std::string& name, int level) const
     // use highest-priority value available (see CONF_*)
     if (level < 0) {
       return {p->second.rbegin()->second, true};
-    } else if (auto found = p->second.find(level);
-               found != p->second.end()) {
+    } else if (auto found = p->second.find(level); found != p->second.end()) {
       return {found->second, true};
     }
   }

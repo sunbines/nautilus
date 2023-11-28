@@ -14,13 +14,6 @@
 
 #include "include/compat.h"
 
-#ifdef __FreeBSD__
-#include <sys/param.h>
-#include <geom/geom_disk.h>
-#include <sys/disk.h>
-#include <fcntl.h>
-#endif
-
 #include <errno.h>
 #include <sys/ioctl.h>
 #include <sys/stat.h>

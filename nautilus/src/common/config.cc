@@ -43,11 +43,8 @@ using std::ostringstream;
 using std::pair;
 using std::string;
 
-static const char *CEPH_CONF_FILE_DEFAULT = "$data_dir/config, /etc/ceph/$cluster.conf, $home/.ceph/$cluster.conf, $cluster.conf"
-#if defined(__FreeBSD__)
-    ", /usr/local/etc/ceph/$cluster.conf"
-#endif
-    ;
+static const char *CEPH_CONF_FILE_DEFAULT = \
+  "$data_dir/config, /etc/ceph/$cluster.conf, $home/.ceph/$cluster.conf, $cluster.conf";
 
 #define _STR(x) #x
 #define STRINGIFY(x) _STR(x)
@@ -97,9 +94,7 @@ static int conf_stringify(const Option::value_t& v, string *out)
   return 0;
 }
 
-md_config_t::md_config_t(ConfigValues& values,
-			 const ConfigTracker& tracker,
-			 bool is_daemon)
+md_config_t::md_config_t(ConfigValues& values, const ConfigTracker& tracker, bool is_daemon)
   : is_daemon(is_daemon)
 {
   // Load the compile-time list of Option into
@@ -107,53 +102,50 @@ md_config_t::md_config_t(ConfigValues& values,
   for (const auto &i : ceph_options) {
     if (schema.count(i.name)) {
       // We may be instantiated pre-logging so send 
-      std::cerr << "Duplicate config key in schema: '" << i.name << "'"
-                << std::endl;
+      std::cerr << "Duplicate config key in schema: '" << i.name << "'"<< std::endl;
       ceph_abort();
     }
     schema.emplace(std::piecewise_construct,
-		   std::forward_as_tuple(i.name),
-		   std::forward_as_tuple(i));
+                   std::forward_as_tuple(i.name),
+                   std::forward_as_tuple(i));
   }
 
   // Define the debug_* options as well.
   subsys_options.reserve(values.subsys.get_num());
   for (unsigned i = 0; i < values.subsys.get_num(); ++i) {
     string name = string("debug_") + values.subsys.get_name(i);
-    subsys_options.push_back(
-      Option(name, Option::TYPE_STR, Option::LEVEL_ADVANCED));
+    subsys_options.push_back(Option(name, Option::TYPE_STR, Option::LEVEL_ADVANCED));
     Option& opt = subsys_options.back();
-    opt.set_default(stringify(values.subsys.get_log_level(i)) + "/" +
-		    stringify(values.subsys.get_gather_level(i)));
+    opt.set_default(stringify(values.subsys.get_log_level(i)) + "/" + stringify(values.subsys.get_gather_level(i)));
     string desc = string("Debug level for ") + values.subsys.get_name(i);
     opt.set_description(desc.c_str());
     opt.set_flag(Option::FLAG_RUNTIME);
     opt.set_long_description("The value takes the form 'N' or 'N/M' where N and M are values between 0 and 99.  N is the debug level to log (all values below this are included), and M is the level to gather and buffer in memory.  In the event of a crash, the most recent items <= M are dumped to the log file.");
     opt.set_subsys(i);
     opt.set_validator([](std::string *value, std::string *error_message) {
-	int m, n;
-	int r = sscanf(value->c_str(), "%d/%d", &m, &n);
-	if (r >= 1) {
-	  if (m < 0 || m > 99) {
-	    *error_message = "value must be in range [0, 99]";
-	    return -ERANGE;
-	  }
-	  if (r == 2) {
-	    if (n < 0 || n > 99) {
-	      *error_message = "value must be in range [0, 99]";
-	      return -ERANGE;
-	    }
-	  } else {
-	    // normalize to M/N
-	    n = m;
-	    *value = stringify(m) + "/" + stringify(n);
-	  }
-	} else {
-	  *error_message = "value must take the form N or N/M, where N and M are integers";
-	  return -EINVAL;
-	}
-	return 0;
-      });
+      int m, n;
+      int r = sscanf(value->c_str(), "%d/%d", &m, &n);
+      if (r >= 1) {
+        if (m < 0 || m > 99) {
+          *error_message = "value must be in range [0, 99]";
+          return -ERANGE;
+        }
+        if (r == 2) {
+          if (n < 0 || n > 99) {
+            *error_message = "value must be in range [0, 99]";
+            return -ERANGE;
+          }
+        } else {
+          // normalize to M/N
+          n = m;
+          *value = stringify(m) + "/" + stringify(n);
+        }
+      } else {
+        *error_message = "value must take the form N or N/M, where N and M are integers";
+        return -EINVAL;
+      }
+      return 0;
+    });
   }
   for (auto& opt : subsys_options) {
     schema.emplace(opt.name, opt);
@@ -165,8 +157,7 @@ md_config_t::md_config_t(ConfigValues& values,
   // as all loads write to both the values map, and the legacy
   // members if present.
   legacy_values = {
-#define OPTION(name, type) \
-    {std::string(STRINGIFY(name)), &ConfigValues::name},
+#define OPTION(name, type) {std::string(STRINGIFY(name)), &ConfigValues::name},
 #define SAFE_OPTION(name, type) OPTION(name, type)
 #include "common/legacy_config_opts.h"
 #undef OPTION
@@ -182,9 +173,9 @@ md_config_t::md_config_t(ConfigValues& values,
       bool has_daemon_default = !boost::get<boost::blank>(&opt.daemon_value);
       Option::value_t default_val;
       if (is_daemon && has_daemon_default) {
-	default_val = opt.daemon_value;
+	      default_val = opt.daemon_value;
       } else {
-	default_val = opt.value;
+	      default_val = opt.value;
       }
       // We call pre_validate as a sanity check, but also to get any
       // side effect (value modification) from the validator.
@@ -201,9 +192,9 @@ md_config_t::md_config_t(ConfigValues& values,
         ceph_abort();
       }
       if (val != *def_str) {
-	// if the validator normalizes the string into a different form than
-	// what was compiled in, use that.
-	set_val_default(values, tracker, opt.name, val);
+        // if the validator normalizes the string into a different form than
+        // what was compiled in, use that.
+        set_val_default(values, tracker, opt.name, val);
       }
     }
   }
@@ -235,8 +226,7 @@ void md_config_t::validate_schema()
 
   for (const auto &i : legacy_values) {
     if (schema.count(i.first) == 0) {
-      std::cerr << "Schema is missing legacy field '" << i.first << "'"
-                << std::endl;
+      std::cerr << "Schema is missing legacy field '" << i.first << "'" << std::endl;
       ceph_abort();
     }
   }
@@ -263,10 +253,10 @@ void md_config_t::set_val_default(ConfigValues& values,
 }
 
 int md_config_t::set_mon_vals(CephContext *cct,
-    ConfigValues& values,
-    const ConfigTracker& tracker,
-    const map<string,string>& kv,
-    config_callback config_cb)
+                              ConfigValues& values,
+                              const ConfigTracker& tracker,
+                              const map<string,string>& kv,
+                              config_callback config_cb)
 {
   ignored_mon_values.clear();
 
@@ -317,8 +307,7 @@ int md_config_t::set_mon_vals(CephContext *cct,
       return;
     }
     ldout(cct,10) << __func__ << " " << name
-		  << " cleared (was " << Option::to_str(config->second) << ")"
-		  << dendl;
+		    << " cleared (was " << Option::to_str(config->second) << ")" << dendl;
     values.rm_val(name, CONF_MON);
     // if this is a debug option, it needs to propagate to teh subsys;
     // this isn't covered by update_legacy_vals() below.  similarly,
@@ -1092,20 +1081,16 @@ const Option::value_t& md_config_t::_get_val_default(const Option& o) const
   }
 }
 
-void md_config_t::early_expand_meta(
-  const ConfigValues& values,
-  std::string &val,
-  std::ostream *err) const
+void md_config_t::early_expand_meta(const ConfigValues& values,
+                                    std::string &val,
+                                    std::ostream *err) const
 {
   expand_stack_t stack;
-  Option::value_t v = _expand_meta(values,
-				   Option::value_t(val),
-				   nullptr, &stack, err);
+  Option::value_t v = _expand_meta(values, Option::value_t(val), nullptr, &stack, err);
   conf_stringify(v, &val);
 }
 
-bool md_config_t::finalize_reexpand_meta(ConfigValues& values,
-					 const ConfigTracker& tracker)
+bool md_config_t::finalize_reexpand_meta(ConfigValues& values, const ConfigTracker& tracker)
 {
   std::vector<std::string> reexpands;
   reexpands.swap(may_reexpand_meta);
@@ -1122,12 +1107,11 @@ bool md_config_t::finalize_reexpand_meta(ConfigValues& values,
   return !may_reexpand_meta.empty();
 }
 
-Option::value_t md_config_t::_expand_meta(
-  const ConfigValues& values,
-  const Option::value_t& in,
-  const Option *o,
-  expand_stack_t *stack,
-  std::ostream *err) const
+Option::value_t md_config_t::_expand_meta(const ConfigValues& values,
+                                          const Option::value_t& in,
+                                          const Option *o,
+                                          expand_stack_t *stack,
+                                          std::ostream *err) const
 {
   //cout << __func__ << " in '" << in << "' stack " << stack << std::endl;
   if (!stack) {
@@ -1164,18 +1148,17 @@ Option::value_t md_config_t::_expand_meta(
     if ((*str)[pos+1] == '{') {
       // ...${foo_bar}...
       endpos = str->find_first_not_of(valid_chars, pos + 2);
-      if (endpos != std::string::npos &&
-	  (*str)[endpos] == '}') {
-	var = str->substr(pos + 2, endpos - pos - 2);
-	endpos++;
+      if (endpos != std::string::npos && (*str)[endpos] == '}') {
+        var = str->substr(pos + 2, endpos - pos - 2);
+        endpos++;
       }
     } else {
       // ...$foo...
       endpos = str->find_first_not_of(valid_chars, pos + 1);
       if (endpos != std::string::npos)
-	var = str->substr(pos + 1, endpos - pos - 1);
+	      var = str->substr(pos + 1, endpos - pos - 1);
       else
-	var = str->substr(pos + 1);
+	      var = str->substr(pos + 1);
     }
     last_pos = endpos;
 
@@ -1185,63 +1168,60 @@ Option::value_t md_config_t::_expand_meta(
       //cout << " found var " << var << std::endl;
       // special metavariable?
       if (var == "type") {
-	out += values.name.get_type_name();
+	      out += values.name.get_type_name();
       } else if (var == "cluster") {
-	out += values.cluster;
+	      out += values.cluster;
       } else if (var == "name") {
-	out += values.name.to_cstr();
+	      out += values.name.to_cstr();
       } else if (var == "host") {
-	if (values.host == "") {
-	  out += ceph_get_short_hostname();
-	} else {
-	  out += values.host;
-	}
+	      if (values.host == "") {
+	        out += ceph_get_short_hostname();
+	      } else {
+	        out += values.host;
+	      }
       } else if (var == "num") {
-	out += values.name.get_id().c_str();
+	      out += values.name.get_id().c_str();
       } else if (var == "id") {
-	out += values.name.get_id();
+	      out += values.name.get_id();
       } else if (var == "pid") {
-	out += stringify(getpid());
+	      out += stringify(getpid());
         if (o) {
           may_reexpand_meta.push_back(o->name);
         }
       } else if (var == "cctid") {
-	out += stringify((unsigned long long)this);
+	      out += stringify((unsigned long long)this);
       } else if (var == "home") {
-	const char *home = getenv("HOME");
-	out = home ? std::string(home) : std::string();
+	      const char *home = getenv("HOME");
+	      out = home ? std::string(home) : std::string();
       } else {
-	if (var == "data_dir") {
-	  var = data_dir_option;
-	}
-	const Option *o = find_option(var);
-	if (!o) {
-	  out += str->substr(pos, endpos - pos);
-	} else {
-	  auto match = std::find_if(
-	    stack->begin(), stack->end(),
-	    [o](pair<const Option *,const Option::value_t*>& item) {
-	      return item.first == o;
-	    });
-	  if (match != stack->end()) {
-	    // substitution loop; break the cycle
-	    if (err) {
-	      *err << "variable expansion loop at " << var << "="
-		   << Option::to_str(*match->second) << "\n"
-		   << "expansion stack:\n";
-	      for (auto i = stack->rbegin(); i != stack->rend(); ++i) {
-		*err << i->first->name << "="
-		     << Option::to_str(*i->second) << "\n";
+	      if (var == "data_dir") {
+	        var = data_dir_option;
 	      }
-	    }
-	    return Option::value_t(std::string("$") + o->name);
-	  } else {
-	    // recursively evaluate!
-	    string n;
-	    conf_stringify(_get_val(values, *o, stack, err), &n);
-	    out += n;
-	  }
-	}
+	      const Option *o = find_option(var);
+	      if (!o) {
+	        out += str->substr(pos, endpos - pos);
+	      } else {
+	        auto match = std::find_if(stack->begin(), stack->end(),
+	          [o](pair<const Option *,const Option::value_t*>& item) {
+	            return item.first == o;
+	        });
+	        if (match != stack->end()) {
+            // substitution loop; break the cycle
+            if (err) {
+              *err << "variable expansion loop at " << var << "="
+                  << Option::to_str(*match->second) << "\n" << "expansion stack:\n";
+              for (auto i = stack->rbegin(); i != stack->rend(); ++i) {
+                *err << i->first->name << "=" << Option::to_str(*i->second) << "\n";
+              }
+            }
+            return Option::value_t(std::string("$") + o->name);
+          } else {
+            // recursively evaluate!
+            string n;
+            conf_stringify(_get_val(values, *o, stack, err), &n);
+            out += n;
+	        }
+	      }
       }
     }
     pos = str->find('$', last_pos);
@@ -1365,13 +1345,12 @@ int md_config_t::_get_val_from_conf_file(
   return -ENOENT;
 }
 
-int md_config_t::_set_val(
-  ConfigValues& values,
-  const ConfigTracker& observers,
-  const std::string &raw_val,
-  const Option &opt,
-  int level,
-  std::string *error_message)
+int md_config_t::_set_val(ConfigValues& values,
+                          const ConfigTracker& observers,
+                          const std::string &raw_val,
+                          const Option &opt,
+                          int level,
+                          std::string *error_message)
 {
   Option::value_t new_value;
   ceph_assert(error_message);
@@ -1386,8 +1365,7 @@ int md_config_t::_set_val(
       !observers.is_tracking(opt.name)) {
     // accept value if it is not actually a change
     if (new_value != _get_val_nometa(values, opt)) {
-      *error_message = string("Configuration option '") + opt.name +
-	"' may not be modified at runtime";
+      *error_message = string("Configuration option '") + opt.name + "' may not be modified at runtime";
       return -ENOSYS;
     }
   }
@@ -1509,7 +1487,7 @@ void md_config_t::update_legacy_vals(ConfigValues& values)
 }
 
 void md_config_t::update_legacy_val(ConfigValues& values,
-				    const Option &opt,
+				                            const Option &opt,
                                     md_config_t::member_ptr_t member_ptr)
 {
   Option::value_t v = _get_val(values, opt);
@@ -1531,10 +1509,9 @@ static void dump(Formatter *f, int level, Option::value_t in)
   }
 }
 
-void md_config_t::diff(
-  const ConfigValues& values,
-  Formatter *f,
-  string name) const
+void md_config_t::diff(const ConfigValues& values,
+                       Formatter *f,
+                       string name) const
 {
   values.for_each([this, f, &values] (auto& name, auto& configs) {
     if (configs.empty()) {

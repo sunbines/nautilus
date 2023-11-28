@@ -80,8 +80,7 @@ public:
                          uuid_d ConfigValues::*> member_ptr_t;
 
   // For use when intercepting configuration updates
-  typedef std::function<bool(
-      const std::string &k, const std::string &v)> config_callback;
+  typedef std::function<bool(const std::string &k, const std::string &v)> config_callback;
 
   /// true if we are a daemon (as per CephContext::code_env)
   const bool is_daemon;
@@ -121,6 +120,7 @@ public:
   explicit md_config_t(ConfigValues& values,
 		       const ConfigTracker& tracker,
 		       bool is_daemon=false);
+
   ~md_config_t();
 
   // Parse a config file
@@ -242,9 +242,8 @@ public:
 
 private:
   // we use this to avoid variable expansion loops
-  typedef boost::container::small_vector<pair<const Option*,
-					      const Option::value_t*>,
-					 4> expand_stack_t;
+  typedef boost::container::small_vector<
+      pair<const Option*, const Option::value_t*>, 4> expand_stack_t;
 
   void validate_schema();
   void validate_default_settings();
@@ -289,13 +288,12 @@ private:
 
   // @returns negative number for an error, otherwise a
   //          @c ConfigValues::set_value_result_t is returned.
-  int _set_val(
-    ConfigValues& values,
-    const ConfigTracker& tracker,
-    const std::string &val,
-    const Option &opt,
-    int level,  // CONF_*
-    std::string *error_message);
+  int _set_val(ConfigValues& values,
+               const ConfigTracker& tracker,
+               const std::string &val,
+               const Option &opt,
+               int level,  // CONF_*
+               std::string *error_message);
 
   template <typename T>
   void assign_member(member_ptr_t ptr, const Option::value_t &val);
@@ -319,8 +317,7 @@ public:  // for global_init
 			 std::ostream *oss) const;
 
   // for those want to reexpand special meta, e.g, $pid
-  bool finalize_reexpand_meta(ConfigValues& values,
-			      const ConfigTracker& tracker);
+  bool finalize_reexpand_meta(ConfigValues& values, const ConfigTracker& tracker);
 private:
 
   /// expand all metavariables in config structure.
@@ -345,8 +342,7 @@ public:
   string data_dir_option;  ///< data_dir config option, if any
 
 public:
-  unsigned get_osd_pool_default_min_size(const ConfigValues& values,
-                                         uint8_t size) const {
+  unsigned get_osd_pool_default_min_size(const ConfigValues& values, uint8_t size) const {
     uint8_t min_size = get_val<uint64_t>(values, "osd_pool_default_min_size");
     return min_size ? std::min(min_size, size) : (size - size / 2);
   }

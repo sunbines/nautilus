@@ -25,47 +25,48 @@
 struct ceph_timespec;
 
 namespace ceph {
-  namespace time_detail {
-    using std::chrono::duration_cast;
-    using std::chrono::seconds;
-    using std::chrono::microseconds;
-    using std::chrono::nanoseconds;
-    // Currently we use a 64-bit count of nanoseconds.
+namespace time_detail {
 
-    // We could, if we wished, use a struct holding a uint64_t count
-    // of seconds and a uint32_t count of nanoseconds.
+	using std::chrono::duration_cast;
+	using std::chrono::seconds;
+	using std::chrono::microseconds;
+	using std::chrono::nanoseconds;
+	// Currently we use a 64-bit count of nanoseconds.
 
-    // At least this way we can change it to something else if we
-    // want.
-    typedef uint64_t rep;
+	// We could, if we wished, use a struct holding a uint64_t count
+	// of seconds and a uint32_t count of nanoseconds.
 
-    // A concrete duration, unsigned. The timespan Ceph thinks in.
-    typedef std::chrono::duration<rep, std::nano> timespan;
+	// At least this way we can change it to something else if we
+	// want.
+	typedef uint64_t rep;
+
+	// A concrete duration, unsigned. The timespan Ceph thinks in.
+	typedef std::chrono::duration<rep, std::nano> timespan;
 
 
-    // Like the above but signed.
-    typedef int64_t signed_rep;
+	// Like the above but signed.
+	typedef int64_t signed_rep;
 
-    typedef std::chrono::duration<signed_rep, std::nano> signedspan;
+	typedef std::chrono::duration<signed_rep, std::nano> signedspan;
 
-    // We define our own clocks so we can have our choice of all time
-    // sources supported by the operating system. With the standard
-    // library the resolution and cost are unspecified. (For example,
-    // the libc++ system_clock class gives only microsecond
-    // resolution.)
+	// We define our own clocks so we can have our choice of all time
+	// sources supported by the operating system. With the standard
+	// library the resolution and cost are unspecified. (For example,
+	// the libc++ system_clock class gives only microsecond
+	// resolution.)
 
-    // One potential issue is that we should accept system_clock
-    // timepoints in user-facing APIs alongside (or instead of)
-    // ceph::real_clock times.
-    class real_clock {
-    public:
-      typedef timespan duration;
-      typedef duration::rep rep;
-      typedef duration::period period;
-      // The second template parameter defaults to the clock's duration
-      // type.
-      typedef std::chrono::time_point<real_clock> time_point;
-      static constexpr const bool is_steady = false;
+	// One potential issue is that we should accept system_clock
+	// timepoints in user-facing APIs alongside (or instead of)
+	// ceph::real_clock times.
+	class real_clock {
+	public:
+		typedef timespan duration;
+		typedef duration::rep rep;
+		typedef duration::period period;
+		// The second template parameter defaults to the clock's duration
+		// type.
+		typedef std::chrono::time_point<real_clock> time_point;
+		static constexpr const bool is_steady = false;
 
       static time_point now() noexcept {
 	struct timespec ts;

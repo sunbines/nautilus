@@ -27,11 +27,7 @@ void BackTrace::print(std::ostream& out) const
     char *begin = 0, *end = 0;
     
     // find the parentheses and address offset surrounding the mangled name
-#ifdef __FreeBSD__
-    static constexpr char OPEN = '<';
-#else
     static constexpr char OPEN = '(';
-#endif
     for (char *j = strings[i]; *j; ++j) {
       if (*j == OPEN)
 	begin = j+1;
@@ -87,11 +83,7 @@ void BackTrace::dump(Formatter *f) const
     char *begin = 0, *end = 0;
 
     // find the parentheses and address offset surrounding the mangled name
-#ifdef __FreeBSD__
-    static constexpr char OPEN = '<';
-#else
     static constexpr char OPEN = '(';
-#endif
     for (char *j = strings[i]; *j; ++j) {
       if (*j == OPEN)
 	begin = j+1;

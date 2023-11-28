@@ -22,6 +22,7 @@ ceph = ceph-v14.2.22
 all:  .build_ceph
   
 .build_ceph:
+	@(if [ -d $(build_dir) ]; then rm -rf $(build_dir); fi)
 	@(mkdir -p $(build_dir)/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS})
 	@(if [ -d $(ceph_dest_dir) ]; then mkdir -p $(ceph_dest_dir); fi)
 

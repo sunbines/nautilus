@@ -16,37 +16,27 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <pthread.h>
-
 #include <iostream>
 #include <string>
 
 #include "include/ceph_features.h"
 #include "include/compat.h"
 #include "include/random.h"
-
 #include "common/config.h"
 #include "common/strtol.h"
-
 #include "mon/MonMap.h"
 #include "mds/MDSDaemon.h"
-
 #include "msg/Messenger.h"
-
 #include "common/Timer.h"
 #include "common/ceph_argparse.h"
 #include "common/pick_address.h"
 #include "common/Preforker.h"
-
 #include "global/global_init.h"
 #include "global/signal_handler.h"
 #include "global/pidfile.h"
-
 #include "mon/MonClient.h"
-
 #include "auth/KeyRing.h"
-
 #include "perfglue/heap_profiler.h"
-
 #include "include/ceph_assert.h"
 
 #define dout_context g_ceph_context
@@ -88,9 +78,9 @@ int main(int argc, const char **argv)
     exit(0);
   }
 
-  auto cct = global_init(NULL, args,
-			 CEPH_ENTITY_TYPE_MDS, CODE_ENVIRONMENT_DAEMON,
-			 0, "mds_data");
+  auto cct = global_init(NULL, args, 
+    CEPH_ENTITY_TYPE_MDS, CODE_ENVIRONMENT_DAEMON, 0, "mds_data");
+
   ceph_heap_profiler_init();
 
   std::string val, action;
@@ -145,7 +135,9 @@ int main(int argc, const char **argv)
 
   auto nonce = ceph::util::generate_random_number<uint64_t>();
 
-  std::string public_msgr_type = g_conf()->ms_public_type.empty() ? g_conf().get_val<std::string>("ms_type") : g_conf()->ms_public_type;
+  std::string public_msgr_type = g_conf()->ms_public_type.empty() ? 
+    g_conf().get_val<std::string>("ms_type") : g_conf()->ms_public_type;
+
   Messenger *msgr = Messenger::create(g_ceph_context, public_msgr_type,
 				      entity_name_t::MDS(-1), "mds",
 				      nonce, Messenger::HAS_MANY_CONNECTIONS);
