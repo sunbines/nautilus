@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 3.5.1)
 project(ceph CXX C ASM)
 set(VERSION 14.2.22)
 
+set(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -Wall -g")
+set(CMAKE_CXX_FLAGS "-O0 -Wall -g")
+set(CMAKE_C_FLAGS "-O0 -Wall -g ")
+
 if(POLICY CMP0028)
   cmake_policy(SET CMP0028 NEW)
 endif()
