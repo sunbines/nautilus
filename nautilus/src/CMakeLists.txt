@@ -211,11 +211,6 @@ if(WITH_OCF)
   add_subdirectory(ocf)
 endif()
 
-option(WITH_CEPHFS_JAVA "build libcephfs Java bindings" OFF)
-if(WITH_CEPHFS_JAVA)
-  add_subdirectory(java)
-endif()
-
 # Python stuff
 option(WITH_PYTHON2 "build python2 bindings" ON)
 if(WITH_PYTHON2)

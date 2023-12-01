@@ -2146,22 +2146,6 @@ fi
 %{_libdir}/ceph/ceph-monstore-update-crush.sh
 %endif
 
-%if 0%{with cephfs_java}
-%files -n libcephfs_jni1
-%{_libdir}/libcephfs_jni.so.*
-
-%post -n libcephfs_jni1 -p /sbin/ldconfig
-
-%postun -n libcephfs_jni1 -p /sbin/ldconfig
-
-%files -n libcephfs_jni-devel
-%{_libdir}/libcephfs_jni.so
-
-%files -n cephfs-java
-%{_javadir}/libcephfs.jar
-%{_javadir}/libcephfs-test.jar
-%endif
-
 %files -n rados-objclass-devel
 %dir %{_includedir}/rados
 %{_includedir}/rados/objclass.h
