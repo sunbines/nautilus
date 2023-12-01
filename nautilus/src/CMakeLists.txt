@@ -271,33 +271,6 @@ add_subdirectory(json_spirit)
 include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/src/xxHash")
 include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/src/rapidjson/include")
 
-if(WITH_SEASTAR)
-  find_package(fmt 5.2.1 QUIET)
-  if(NOT fmt_FOUND)
-    message(STATUS "Could not find fmt, will build it")
-    add_subdirectory(seastar/fmt)
-  endif()
-  find_package(c-ares 1.13.0 QUIET)
-  if(NOT c-ares_FOUND)
-    message(STATUS "Could not find c-ares, will build it")
-    include(Buildc-ares)
-    build_c_ares()
-  endif()
-  macro(find_package name)
-    if(NOT TARGET ${name})
-      _find_package(${ARGV})
-    endif()
-  endmacro ()
-  set(Seastar_HWLOC OFF CACHE BOOL "" FORCE)
-  set(Seastar_STD_OPTIONAL_VARIANT_STRINGVIEW ON CACHE BOOL "" FORCE)
-  set(Seastar_CXX_FLAGS "-Wno-sign-compare;-Wno-attributes;-Wno-pessimizing-move;-Wno-address-of-packed-member" CACHE STRING "" FORCE)
-  add_subdirectory(seastar)
-  # create the directory so cmake won't complain when looking at the imported
-  # target: Seastar exports this directory created at build-time
-  file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/seastar/gen/include")
-  add_subdirectory(crimson)
-endif()
-
 set(libcommon_files
   ${CMAKE_BINARY_DIR}/src/include/ceph_ver.h
   ceph_ver.c
