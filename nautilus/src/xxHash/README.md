@@ -5,13 +5,7 @@ xxHash is an Extremely fast Hash algorithm, running at RAM speed limits.
 It successfully completes the [SMHasher](http://code.google.com/p/smhasher/wiki/SMHasher) test suite 
 which evaluates collision, dispersion and randomness qualities of hash functions.
 
-|Branch      |Status   |
-|------------|---------|
-|master      | [![Build Status](https://travis-ci.org/Cyan4973/xxHash.svg?branch=master)](https://travis-ci.org/Cyan4973/xxHash?branch=master) |
-|dev         | [![Build Status](https://travis-ci.org/Cyan4973/xxHash.svg?branch=dev)](https://travis-ci.org/Cyan4973/xxHash?branch=dev) |
-
 > **Branch Policy:**
-
 > - The "master" branch is considered stable, at all times.
 > - The "dev" branch is the one where all contributions must be merged
     before being promoted to master.
