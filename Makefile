@@ -15,7 +15,7 @@
 TOPDIR := $(shell /bin/pwd)
 core_src_dir = $(TOPDIR)
 build_dir = $(TOPDIR)/build
-ceph_src_dir = $(core_src_dir)/nautilus
+ceph_src_dir = $(core_src_dir)/ceph
 ceph_dest_dir = $(build_dir)/SOURCES/ceph-v14.2.22
 boost_src_dir = $(TOPDIR)/boost
 ceph = ceph-v14.2.22

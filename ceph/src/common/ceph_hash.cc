@@ -118,11 +118,11 @@ const char *ceph_str_hash_name(int type)
 
 bool ceph_str_hash_valid(int type)
 {
-        switch (type) {
-        case CEPH_STR_HASH_LINUX:
-        case CEPH_STR_HASH_RJENKINS:
-                return true;
-        default:
-                return false;
-        }
+	switch (type) {
+	case CEPH_STR_HASH_LINUX:
+	case CEPH_STR_HASH_RJENKINS:
+		return true;
+	default:
+		return false;
+	}
 }

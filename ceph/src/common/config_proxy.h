@@ -28,8 +28,7 @@ class ConfigProxy {
    * recursive, for simplicity.
    * It is best if this lock comes first in the lock hierarchy. We will
    * hold this lock when calling configuration observers.  */
-  mutable ceph::recursive_mutex lock =
-    ceph::make_recursive_mutex("ConfigProxy::lock");
+  mutable ceph::recursive_mutex lock = ceph::make_recursive_mutex("ConfigProxy::lock");
 
   class CallGate {
   private:

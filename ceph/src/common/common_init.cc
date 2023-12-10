@@ -59,8 +59,7 @@ CephContext *common_preinit(const CephInitParameters &iparams,
 			  "$run_dir/$cluster-$name.$pid.$cctid.asok");
   }
 
-  if (code_env == CODE_ENVIRONMENT_LIBRARY ||
-      code_env == CODE_ENVIRONMENT_UTILITY_NODOUT) {
+  if (code_env == CODE_ENVIRONMENT_LIBRARY || code_env == CODE_ENVIRONMENT_UTILITY_NODOUT) {
     conf.set_val_default("log_to_stderr", "false");
     conf.set_val_default("err_to_stderr", "false");
     conf.set_val_default("log_flush_on_exit", "false");
