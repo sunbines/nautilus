@@ -109,8 +109,8 @@
 # main package definition
 #################################################################################
 Name:		ceph
-Version:	14.2.22
-Release:	1.gf1af4c7f53%{?dist}
+Version:	v14.2.22
+Release:	0%{?dist}
 %if 0%{?fedora} || 0%{?rhel}
 Epoch:		2
 %endif
@@ -125,7 +125,7 @@ License:	LGPL-2.1 and CC-BY-SA-3.0 and GPL-2.0 and BSL-1.0 and BSD-3-Clause and 
 Group:		System/Filesystems
 %endif
 URL:		http://ceph.com/
-Source0:	%{?_remote_tarball_prefix}ceph-14.2.22-1-gf1af4c7f53.tar.bz2
+Source0:	%{?_remote_tarball_prefix}ceph-v14.2.22.tar.gz
 %if 0%{?suse_version}
 # _insert_obs_source_lines_here
 ExclusiveArch:  x86_64 aarch64 ppc64le s390x
@@ -1147,7 +1147,7 @@ This package provides Ceph’s default alerts for Prometheus.
 # common
 #################################################################################
 %prep
-%autosetup -p1 -n ceph-14.2.22-1-gf1af4c7f53
+%autosetup -p1 -n ceph-v14.2.22
 
 %build
 # LTO can be enabled as soon as the following GCC bug is fixed:
@@ -2173,24 +2173,12 @@ fi
 %if 0%{with ceph_test_package}
 %files -n ceph-test
 %{_bindir}/ceph-client-debug
-%{_bindir}/ceph_bench_log
-%{_bindir}/ceph_kvstorebench
-%{_bindir}/ceph_multi_stress_watch
-%{_bindir}/ceph_erasure_code
-%{_bindir}/ceph_erasure_code_benchmark
-%{_bindir}/ceph_omapbench
-%{_bindir}/ceph_objectstore_bench
-%{_bindir}/ceph_perf_objectstore
-%{_bindir}/ceph_perf_local
-%{_bindir}/ceph_perf_msgr_client
-%{_bindir}/ceph_perf_msgr_server
 %{_bindir}/ceph_psim
 %{_bindir}/ceph_radosacl
 %{_bindir}/ceph_rgw_jsonparser
 %{_bindir}/ceph_rgw_multiparser
 %{_bindir}/ceph_scratchtool
 %{_bindir}/ceph_scratchtoolpp
-%{_bindir}/ceph_test_*
 %{_bindir}/ceph-coverage
 %{_bindir}/ceph-debugpack
 %{_bindir}/cephdeduptool

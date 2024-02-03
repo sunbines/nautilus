@@ -35,7 +35,7 @@ all:  .build_ceph
 		rm -rf $(ceph))
 
 	@echo "---------- copy spec ----------"
-	@(cp -af $(core_src_dir)/ceph.spec $(build_dir)/SPECS/)
+	@(cp -af $(core_src_dir)/ceph/ceph.spec $(build_dir)/SPECS/)
 
 	@echo "---------- build ceph ----------"
 	@(rpmbuild -ba --define="_topdir $(build_dir)" $(build_dir)/SPECS/ceph.spec)
