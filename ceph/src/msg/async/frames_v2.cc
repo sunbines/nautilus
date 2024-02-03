@@ -18,7 +18,6 @@
 
 #undef FMT_HEADER_ONLY
 #define FMT_HEADER_ONLY 1
-#include "seastar/fmt/include/fmt/format.h"
 
 namespace ceph::msgr::v2 {
 
@@ -47,8 +46,9 @@ static void check_segment_crc(const bufferlist& segment_bl,
                               uint32_t expected_crc) {
   uint32_t crc = segment_bl.crc32c(-1);
   if (crc != expected_crc) {
-    throw FrameError(fmt::format(
-        "bad segment crc calculated={} expected={}", crc, expected_crc));
+    throw FrameError(std::string(
+        "bad segment crc calculated" + std::to_string(crc) + 
+        "expected=" + std::to_string(expected_crc)));
   }
 }
 
@@ -58,7 +58,7 @@ static bool check_epilogue_late_status(__u8 late_status) {
   __u8 aborted = late_status & FRAME_LATE_STATUS_ABORTED_MASK;
   if (aborted != FRAME_LATE_STATUS_ABORTED &&
       aborted != FRAME_LATE_STATUS_COMPLETE) {
-    throw FrameError(fmt::format("bad late_status"));
+    throw FrameError("bad late_status");
   }
   return aborted == FRAME_LATE_STATUS_COMPLETE;
 }
@@ -301,15 +301,16 @@ Tag FrameAssembler::disassemble_preamble(bufferlist& preamble_bl) {
       0, reinterpret_cast<const unsigned char*>(preamble),
       sizeof(*preamble) - sizeof(preamble->crc));
   if (crc != preamble->crc) {
-    throw FrameError(fmt::format(
-        "bad preamble crc calculated={} expected={}", crc, preamble->crc));
+    throw FrameError(std::string(
+        "bad preamble crc calculated=" + std::to_string(crc) +
+        " expected=" + std::to_string(preamble->crc)));
   }
 
   // see calc_num_segments()
   if (preamble->num_segments < 1 ||
       preamble->num_segments > MAX_NUM_SEGMENTS) {
-    throw FrameError(fmt::format(
-        "bad number of segments num_segments={}", preamble->num_segments));
+    throw FrameError(std::string(
+      "bad number of segments num_segments=" + std::to_string(preamble->num_segments)));
   }
   if (preamble->num_segments > 1 &&
       preamble->segments[preamble->num_segments - 1].length == 0) {

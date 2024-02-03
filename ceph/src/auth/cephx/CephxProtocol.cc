@@ -514,7 +514,7 @@ bool cephx_verify_authorizer(CephContext *cct, KeyStore *keys,
   CephXAuthorizeReply reply;
   // reply.trans_id = auth_msg.trans_id;
   reply.nonce_plus_one = auth_msg.nonce + 1;
-#ifndef WITH_SEASTAR
+
   if (connection_secret) {
     // generate a connection secret
     connection_secret->resize(connection_secret_required_len);
@@ -524,7 +524,7 @@ bool cephx_verify_authorizer(CephContext *cct, KeyStore *keys,
     }
     reply.connection_secret = *connection_secret;
   }
-#endif
+  
   if (encode_encrypt(cct, reply, ticket_info.session_key, *reply_bl, error)) {
     ldout(cct, 10) << "verify_authorizer: encode_encrypt error: " << error << dendl;
     return false;

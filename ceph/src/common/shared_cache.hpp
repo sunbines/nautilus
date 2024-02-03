@@ -17,11 +17,7 @@
 
 #include <map>
 #include <list>
-#ifdef WITH_SEASTAR
-#include <boost/smart_ptr/local_shared_ptr.hpp>
-#else
 #include <memory>
-#endif
 #include "common/ceph_mutex.h"
 #include "common/dout.h"
 #include "include/unordered_map.h"
@@ -32,13 +28,8 @@
 template <class K, class V>
 class SharedLRU {
   CephContext *cct;
-#ifdef WITH_SEASTAR
-  using VPtr = boost::local_shared_ptr<V>;
-  using WeakVPtr = boost::weak_ptr<V>;
-#else
   using VPtr = std::shared_ptr<V>;
   using WeakVPtr = std::weak_ptr<V>;
-#endif
   ceph::mutex lock;
   size_t max_size;
   ceph::condition_variable cond;

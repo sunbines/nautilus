@@ -24,7 +24,6 @@
 // prefer header-only fmt, in general
 #undef FMT_HEADER_ONLY
 #define FMT_HEADER_ONLY 1
-#include "seastar/fmt/include/fmt/format.h"
 
 #include "services/svc_sys_obj.h"
 
@@ -1662,8 +1661,8 @@ std::string s3_expiration_header(
     time_t exp = ceph::real_clock::to_time_t(*expiration_date);
     if (std::strftime(exp_buf, sizeof(exp_buf),
 		      "%a, %d %b %Y %T %Z", std::gmtime(&exp))) {
-      hdr = fmt::format("expiry-date=\"{0}\", rule-id=\"{1}\"", exp_buf,
-			*rule_id);
+      hdr = std::string("expiry-date=\""+ std::string(exp_buf) + 
+          "\", rule-id=\"" + (*rule_id) + "\"");
     } else {
       ldpp_dout(dpp, 0) << __func__ <<
 	"() strftime of life cycle expiration header failed"

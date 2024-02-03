@@ -30,14 +30,9 @@
 #include "common/cmdparse.h"
 #include "common/code_environment.h"
 #include "msg/msg_types.h"
-#ifdef WITH_SEASTAR
-#include "crimson/common/config_proxy.h"
-#include "crimson/common/perf_counters_collection.h"
-#else
 #include "common/config_proxy.h"
 #include "include/spinlock.h"
 #include "common/perf_counters_collection.h"
-#endif
 
 
 #include "crush/CrushLocation.h"
@@ -58,33 +53,6 @@ namespace ceph {
   }
 }
 
-#ifdef WITH_SEASTAR
-class CephContext {
-public:
-  CephContext();
-  CephContext(uint32_t,
-	      code_environment_t=CODE_ENVIRONMENT_UTILITY,
-	      int = 0)
-    : CephContext{}
-  {}
-  ~CephContext();
-
-  uint32_t get_module_type() const;
-  bool check_experimental_feature_enabled(const std::string& feature) {
-    // everything crimson is experimental...
-    return true;
-  }
-  CryptoRandom* random() const;
-  PerfCountersCollectionImpl* get_perfcounters_collection();
-  ceph::common::ConfigProxy& _conf;
-  ceph::common::PerfCountersCollection& _perf_counters_collection;
-  CephContext* get();
-  void put();
-private:
-  std::unique_ptr<CryptoRandom> _crypto_random;
-  unsigned nref;
-};
-#else
 /* A CephContext represents the context held by a single library user.
  * There can be multiple CephContexts in the same process.
  *
@@ -373,6 +341,5 @@ private:
 
   friend class CephContextObs;
 };
-#endif	// WITH_SEASTAR
 
 #endif

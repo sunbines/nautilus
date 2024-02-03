@@ -285,11 +285,9 @@ private:
 
   int prio_adjust = 0;
 
-#ifndef WITH_SEASTAR
   const std::string m_lock_name;
   /** Protects m_data */
   ceph::mutex m_lock;
-#endif
 
   perf_counter_data_vec_t m_data;
 

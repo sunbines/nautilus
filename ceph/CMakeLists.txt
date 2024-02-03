@@ -641,9 +641,6 @@ if (WITH_SYSTEM_ROCKSDB)
   find_package(RocksDB 5.8 REQUIRED)
 endif()
 
-option(WITH_SEASTAR "Build seastar components")
-set(HAVE_SEASTAR ${WITH_SEASTAR})
-
 # Boost
 option(WITH_SYSTEM_BOOST "require and build with system Boost" OFF)
 
@@ -659,9 +656,6 @@ if(WITH_MGR)
 endif()
 if(WITH_BOOST_CONTEXT)
   list(APPEND BOOST_COMPONENTS context coroutine)
-endif()
-if(WITH_SEASTAR)
-  list(APPEND BOOST_COMPONENTS filesystem timer)
 endif()
 
 set(Boost_USE_MULTITHREADED ON)

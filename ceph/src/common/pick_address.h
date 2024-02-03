@@ -26,7 +26,6 @@ enum IfaceType {
   IFACE_BOND_PORT = 2
 };
 
-#ifndef WITH_SEASTAR
 /*
   Pick addresses based on subnets if needed.
 
@@ -48,7 +47,6 @@ enum IfaceType {
  */
 void pick_addresses(CephContext *cct, int needs);
 
-#endif	// !WITH_SEASTAR
 
 int pick_addresses(CephContext *cct, unsigned flags, entity_addrvec_t *addrs,
 		   int preferred_numa_node = -1);

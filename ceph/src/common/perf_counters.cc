@@ -154,10 +154,8 @@ PerfCounters::~PerfCounters()
 
 void PerfCounters::inc(int idx, uint64_t amt)
 {
-#ifndef WITH_SEASTAR
   if (!m_cct->_conf->perf)
     return;
-#endif
 
   ceph_assert(idx > m_lower_bound);
   ceph_assert(idx < m_upper_bound);
@@ -175,10 +173,8 @@ void PerfCounters::inc(int idx, uint64_t amt)
 
 void PerfCounters::dec(int idx, uint64_t amt)
 {
-#ifndef WITH_SEASTAR
   if (!m_cct->_conf->perf)
     return;
-#endif
 
   ceph_assert(idx > m_lower_bound);
   ceph_assert(idx < m_upper_bound);
@@ -191,10 +187,8 @@ void PerfCounters::dec(int idx, uint64_t amt)
 
 void PerfCounters::set(int idx, uint64_t amt)
 {
-#ifndef WITH_SEASTAR
   if (!m_cct->_conf->perf)
     return;
-#endif
 
   ceph_assert(idx > m_lower_bound);
   ceph_assert(idx < m_upper_bound);
@@ -215,10 +209,8 @@ void PerfCounters::set(int idx, uint64_t amt)
 
 uint64_t PerfCounters::get(int idx) const
 {
-#ifndef WITH_SEASTAR
   if (!m_cct->_conf->perf)
     return 0;
-#endif
 
   ceph_assert(idx > m_lower_bound);
   ceph_assert(idx < m_upper_bound);
@@ -230,10 +222,8 @@ uint64_t PerfCounters::get(int idx) const
 
 void PerfCounters::tinc(int idx, utime_t amt)
 {
-#ifndef WITH_SEASTAR
   if (!m_cct->_conf->perf)
     return;
-#endif
 
   ceph_assert(idx > m_lower_bound);
   ceph_assert(idx < m_upper_bound);
@@ -251,10 +241,8 @@ void PerfCounters::tinc(int idx, utime_t amt)
 
 void PerfCounters::tinc(int idx, ceph::timespan amt)
 {
-#ifndef WITH_SEASTAR
   if (!m_cct->_conf->perf)
     return;
-#endif
 
   ceph_assert(idx > m_lower_bound);
   ceph_assert(idx < m_upper_bound);
@@ -272,10 +260,8 @@ void PerfCounters::tinc(int idx, ceph::timespan amt)
 
 void PerfCounters::tset(int idx, utime_t amt)
 {
-#ifndef WITH_SEASTAR
   if (!m_cct->_conf->perf)
     return;
-#endif
 
   ceph_assert(idx > m_lower_bound);
   ceph_assert(idx < m_upper_bound);
@@ -289,10 +275,8 @@ void PerfCounters::tset(int idx, utime_t amt)
 
 utime_t PerfCounters::tget(int idx) const
 {
-#ifndef WITH_SEASTAR
   if (!m_cct->_conf->perf)
     return utime_t();
-#endif
 
   ceph_assert(idx > m_lower_bound);
   ceph_assert(idx < m_upper_bound);
@@ -305,10 +289,8 @@ utime_t PerfCounters::tget(int idx) const
 
 void PerfCounters::hinc(int idx, int64_t x, int64_t y)
 {
-#ifndef WITH_SEASTAR
   if (!m_cct->_conf->perf)
     return;
-#endif
 
   ceph_assert(idx > m_lower_bound);
   ceph_assert(idx < m_upper_bound);
@@ -322,10 +304,8 @@ void PerfCounters::hinc(int idx, int64_t x, int64_t y)
 
 pair<uint64_t, uint64_t> PerfCounters::get_tavg_ns(int idx) const
 {
-#ifndef WITH_SEASTAR
   if (!m_cct->_conf->perf)
     return make_pair(0, 0);
-#endif
 
   ceph_assert(idx > m_lower_bound);
   ceph_assert(idx < m_upper_bound);
@@ -473,12 +453,9 @@ PerfCounters::PerfCounters(CephContext *cct, const std::string &name,
   : m_cct(cct),
     m_lower_bound(lower_bound),
     m_upper_bound(upper_bound),
-    m_name(name)
-#ifndef WITH_SEASTAR
-    ,
+    m_name(name),
     m_lock_name(std::string("PerfCounters::") + name.c_str()),
     m_lock(ceph::make_mutex(m_lock_name))
-#endif
 {
   m_data.resize(upper_bound - lower_bound - 1);
 }

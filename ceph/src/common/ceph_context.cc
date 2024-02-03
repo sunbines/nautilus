@@ -42,9 +42,7 @@
 #include "common/PluginRegistry.h"
 #include "common/valgrind.h"
 #include "include/spinlock.h"
-#ifndef WITH_SEASTAR
 #include "mon/MonMap.h"
-#endif
 
 using ceph::bufferlist;
 using ceph::HeartbeatMap;
@@ -55,46 +53,6 @@ using ceph::HeartbeatMap;
 #include <iostream>
 #include <pthread.h>
 
-#ifdef WITH_SEASTAR
-CephContext::CephContext()
-  : _conf{ceph::common::local_conf()},
-    _perf_counters_collection{ceph::common::local_perf_coll()},
-    _crypto_random{std::make_unique<CryptoRandom>()}
-{}
-
-// define the dtor in .cc as CryptoRandom is an incomplete type in the header
-CephContext::~CephContext()
-{}
-
-uint32_t CephContext::get_module_type() const
-{
-  return CEPH_ENTITY_TYPE_OSD;
-}
-
-CryptoRandom* CephContext::random() const
-{
-  return _crypto_random.get();
-}
-
-CephContext* CephContext::get()
-{
-  ++nref;
-  return this;
-}
-
-void CephContext::put()
-{
-  if (--nref == 0) {
-    delete this;
-  }
-}
-
-PerfCountersCollectionImpl* CephContext::get_perfcounters_collection()
-{
-  return _perf_counters_collection.get_perf_collection();
-}
-
-#else  // WITH_SEASTAR
 namespace {
 
 class LockdepObs : public md_config_obs_t {
@@ -963,4 +921,3 @@ void CephContext::set_mon_addrs(const MonMap& mm) {
 
   set_mon_addrs(mon_addrs);
 }
-#endif	// WITH_SEASTAR

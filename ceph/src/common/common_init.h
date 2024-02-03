@@ -44,7 +44,6 @@ enum common_init_flags_t {
   CINIT_FLAG_NO_CCT_PERF_COUNTERS = 0x40,
 };
 
-#ifndef WITH_SEASTAR
 class CephInitParameters;
 
 /*
@@ -66,7 +65,6 @@ class CephInitParameters;
  */
 CephContext *common_preinit(const CephInitParameters &iparams,
 			    enum code_environment_t code_env, int flags);
-#endif // #ifndef WITH_SEASTAR
 
 /* Print out some parse errors. */
 void complain_about_parse_errors(CephContext *cct,
