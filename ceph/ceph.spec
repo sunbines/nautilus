@@ -1299,7 +1299,6 @@ install -m 0644 -D systemd/50-ceph.preset %{buildroot}%{_libexecdir}/systemd/sys
 mkdir -p %{buildroot}%{_sbindir}
 install -m 0644 -D src/logrotate.conf %{buildroot}%{_sysconfdir}/logrotate.d/ceph
 chmod 0644 %{buildroot}%{_docdir}/ceph/sample.ceph.conf
-install -m 0644 -D COPYING %{buildroot}%{_docdir}/ceph/COPYING
 install -m 0644 -D etc/sysctl/90-ceph-osd.conf %{buildroot}%{_sysctldir}/90-ceph-osd.conf
 
 # firewall templates and /sbin/mount.ceph symlink
@@ -1463,7 +1462,6 @@ fi
 %files common
 %dir %{_docdir}/ceph
 %doc %{_docdir}/ceph/sample.ceph.conf
-%license %{_docdir}/ceph/COPYING
 %{_bindir}/ceph
 %{_bindir}/ceph-authtool
 %{_bindir}/ceph-conf
