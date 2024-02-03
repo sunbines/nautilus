@@ -562,10 +562,6 @@ add_subdirectory(compressor)
 
 add_subdirectory(tools)
 
-if(WITH_TESTS)
-  add_subdirectory(test)
-endif()
-
 add_subdirectory(crypto)
 
 if(WITH_TESTS)

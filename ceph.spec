@@ -2173,24 +2173,12 @@ fi
 %if 0%{with ceph_test_package}
 %files -n ceph-test
 %{_bindir}/ceph-client-debug
-%{_bindir}/ceph_bench_log
-%{_bindir}/ceph_kvstorebench
-%{_bindir}/ceph_multi_stress_watch
-%{_bindir}/ceph_erasure_code
-%{_bindir}/ceph_erasure_code_benchmark
-%{_bindir}/ceph_omapbench
-%{_bindir}/ceph_objectstore_bench
-%{_bindir}/ceph_perf_objectstore
-%{_bindir}/ceph_perf_local
-%{_bindir}/ceph_perf_msgr_client
-%{_bindir}/ceph_perf_msgr_server
 %{_bindir}/ceph_psim
 %{_bindir}/ceph_radosacl
 %{_bindir}/ceph_rgw_jsonparser
 %{_bindir}/ceph_rgw_multiparser
 %{_bindir}/ceph_scratchtool
 %{_bindir}/ceph_scratchtoolpp
-%{_bindir}/ceph_test_*
 %{_bindir}/ceph-coverage
 %{_bindir}/ceph-debugpack
 %{_bindir}/cephdeduptool
