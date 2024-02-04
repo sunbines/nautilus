@@ -64,18 +64,6 @@
 
 #define CEPH_BUFFER_API
 
-#if defined(HAVE_XIO)
-struct xio_reg_mem;
-class XioDispatchHook;
-#endif
-#ifdef HAVE_SEASTAR
-namespace seastar {
-template <typename T> class temporary_buffer;
-namespace net {
-class packet;
-}
-}
-#endif // HAVE_SEASTAR
 class deleter;
 template<uint8_t S>
 struct sha_digest_t;
