@@ -702,7 +702,6 @@ add_custom_target(check
 
 add_subdirectory(src)
 
-add_subdirectory(doc)
 if(WITH_MANPAGE)
   add_subdirectory(man)
 endif(WITH_MANPAGE)
