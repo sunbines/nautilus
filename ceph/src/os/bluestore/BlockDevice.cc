@@ -23,14 +23,6 @@
 #include "KernelDevice.h"
 #endif
 
-#if defined(HAVE_SPDK)
-#include "NVMEDevice.h"
-#endif
-
-#if defined(HAVE_PMEM)
-#include "PMEMDevice.h"
-#include "libpmem.h"
-#endif
 
 #include "common/debug.h"
 #include "common/EventTrace.h"
@@ -66,9 +58,6 @@ uint64_t IOContext::get_num_ios() const
 #if defined(HAVE_LIBAIO) || defined(HAVE_POSIXAIO)
   ios += pending_aios.size();
 #endif
-#ifdef HAVE_SPDK
-  ios += total_nseg;
-#endif
   return ios;
 }
 
@@ -94,42 +83,13 @@ BlockDevice *BlockDevice::create(CephContext* cct, const string& path,
       type = "ust-nvme";
   }
 
-#if defined(HAVE_PMEM)
-  if (type == "kernel") {
-    int is_pmem = 0;
-    size_t map_len = 0;
-    void *addr = pmem_map_file(path.c_str(), 0, PMEM_FILE_EXCL, O_RDONLY, &map_len, &is_pmem);
-    if (addr != NULL) {
-      if (is_pmem)
-	type = "pmem";
-      else
-	dout(1) << path.c_str() << " isn't pmem file" << dendl;
-      pmem_unmap(addr, map_len);
-    } else {
-      dout(1) << "pmem_map_file:" << path.c_str() << " failed." << pmem_errormsg() << dendl;
-    }
-  }
-#endif
-
   dout(1) << __func__ << " path " << path << " type " << type << dendl;
 
-#if defined(HAVE_PMEM)
-  if (type == "pmem") {
-    return new PMEMDevice(cct, cb, cbpriv);
-  }
-#endif
 #if defined(HAVE_LIBAIO) || defined(HAVE_POSIXAIO)
   if (type == "kernel") {
     return new KernelDevice(cct, cb, cbpriv, d_cb, d_cbpriv);
   }
 #endif
-#if defined(HAVE_SPDK)
-  if (type == "ust-nvme") {
-    return new NVMEDevice(cct, cb, cbpriv);
-  }
-#endif
-
-
   derr << __func__ << " unknown backend " << type << dendl;
   ceph_abort();
   return NULL;

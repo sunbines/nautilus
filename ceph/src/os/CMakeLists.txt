@@ -48,11 +48,6 @@ if(WITH_FUSE)
     FuseStore.cc)
 endif(WITH_FUSE)
 
-if(WITH_PMEM)
-  list(APPEND libos_srcs
-    bluestore/PMEMDevice.cc)
-endif(WITH_PMEM)
-
 if(HAVE_LIBXFS)
   list(APPEND libos_srcs
     filestore/XfsFileStoreBackend.cc
@@ -66,11 +61,6 @@ if(HAVE_LIBZFS)
   target_include_directories(os_zfs_objs SYSTEM PRIVATE
     ${ZFS_INCLUDE_DIRS})
   list(APPEND libos_srcs $<TARGET_OBJECTS:os_zfs_objs>)
-endif()
-
-if(WITH_SPDK)
-  list(APPEND libos_srcs
-    bluestore/NVMEDevice.cc)
 endif()
 
 add_library(os STATIC ${libos_srcs})
@@ -98,11 +88,6 @@ if(HAVE_LIBZFS)
   target_link_libraries(os ${ZFS_LIBRARIES})
 endif()
 
-if(WITH_SPDK)
-  target_link_libraries(os
-    ${SPDK_LIBRARIES})
-endif()
-
 if(WITH_LTTNG)
   add_dependencies(os objectstore-tp)
 endif()
@@ -121,32 +106,6 @@ if(WITH_BLUESTORE)
   install(TARGETS ceph-bluestore-tool
     DESTINATION bin)
 endif()
-
-if(WITH_PMEM)
-  include(ExternalProject)
-  ExternalProject_Add(nvml_ext
-    DOWNLOAD_DIR ${CMAKE_BINARY_DIR}/src/
-    GIT_REPOSITORY "https://github.com/ceph/nvml.git"
-    GIT_TAG "dd622819dd4ee97d3920f913c70be"
-    SOURCE_DIR ${CMAKE_BINARY_DIR}/src/nvml
-    CONFIGURE_COMMAND ""
-    BUILD_COMMAND $(MAKE)
-    BUILD_IN_SOURCE 1
-    INSTALL_COMMAND "true")
-
-  ExternalProject_Add_Step(nvml_ext forcebuild
-    DEPENDEES configure
-    DEPENDERS build
-    COMMAND "true"
-    ALWAYS 1)
-  add_library(pmem STATIC IMPORTED GLOBAL)
-  add_dependencies(pmem nvml_ext)
-  set_target_properties(pmem PROPERTIES
-    IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/src/nvml/src/nondebug/libpmem.a"
-    INTERFACE_LINK_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
-  target_link_libraries(os pmem)
-  target_include_directories(os SYSTEM PRIVATE "${CMAKE_BINARY_DIR}/src/nvml/src/include")
-endif(WITH_PMEM)
 
 if(WITH_LTTNG AND WITH_EVENTTRACE)
   add_dependencies(os eventtrace_tp)

@@ -18,10 +18,6 @@
 #include "common/errno.h"
 #include "Event.h"
 
-#ifdef HAVE_DPDK
-#include "dpdk/EventDPDK.h"
-#endif
-
 #ifdef HAVE_EPOLL
 #include "EventEpoll.h"
 #else
@@ -108,21 +104,11 @@ int EventCenter::init(int n, unsigned i, const std::string &t)
   type = t;
   idx = i;
 
-  if (t == "dpdk") {
-#ifdef HAVE_DPDK
-    driver = new DPDKDriver(cct);
-#endif
-  } else {
 #ifdef HAVE_EPOLL
   driver = new EpollDriver(cct);
 #else
-#ifdef HAVE_KQUEUE
-  driver = new KqueueDriver(cct);
-#else
   driver = new SelectDriver(cct);
 #endif
-#endif
-  }
 
   if (!driver) {
     lderr(cct) << __func__ << " failed to create event driver " << dendl;

@@ -285,29 +285,11 @@ if(WITH_BLUESTORE)
   endif()
 endif()
 
-option(WITH_SPDK "Enable SPDK" OFF)
-if(WITH_SPDK)
-  if(NOT WITH_BLUESTORE)
-    message(SEND_ERROR "Please enable WITH_BLUESTORE for using SPDK")
-  endif()
-  include(BuildSPDK)
-  build_spdk()
-  set(HAVE_SPDK TRUE)
-endif(WITH_SPDK)
-
-option(WITH_PMEM "Enable PMEM" OFF)
-if(WITH_PMEM)
-  set(HAVE_PMEM ON)
-  if(NOT WITH_BLUESTORE)
-    message(SEND_ERROR "Please enable WITH_BLUESTORE for using PMEM")
-  endif()
-endif()
-
 if(WITH_BLUESTORE)
-  if(NOT AIO_FOUND AND NOT HAVE_POSIXAIO AND NOT WITH_SPDK AND NOT WITH_PMEM)
+  if(NOT AIO_FOUND AND NOT HAVE_POSIXAIO)
     message(SEND_ERROR "WITH_BLUESTORE is ON, "
       "but none of the bluestore backends is enabled. "
-      "Please install libaio, or enable WITH_SPDK or WITH_PMEM (experimental)")
+      "Please install libaio")
   endif()
 endif()
 

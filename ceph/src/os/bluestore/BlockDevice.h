@@ -75,11 +75,6 @@ private:
 public:
   CephContext* cct;
   void *priv;
-#ifdef HAVE_SPDK
-  void *nvme_task_first = nullptr;
-  void *nvme_task_last = nullptr;
-  std::atomic_int total_nseg = {0};
-#endif
 
 #if defined(HAVE_LIBAIO) || defined(HAVE_POSIXAIO)
   std::list<aio_t> pending_aios;    ///< not yet submitted
