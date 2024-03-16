@@ -1400,13 +1400,6 @@ rm -rf %{buildroot}
 %{python3_sitelib}/ceph_volume/*
 %{python3_sitelib}/ceph_volume-*
 %endif
-%{_mandir}/man8/ceph-deploy.8*
-%{_mandir}/man8/ceph-create-keys.8*
-%{_mandir}/man8/ceph-run.8*
-%{_mandir}/man8/crushtool.8*
-%{_mandir}/man8/osdmaptool.8*
-%{_mandir}/man8/monmaptool.8*
-%{_mandir}/man8/ceph-kvstore-tool.8*
 #set up placeholder directories
 %attr(750,ceph,ceph) %dir %{_localstatedir}/lib/ceph/crash
 %attr(750,ceph,ceph) %dir %{_localstatedir}/lib/ceph/crash/posted
@@ -1486,23 +1479,6 @@ fi
 %endif
 %{_bindir}/ceph-post-file
 %{_tmpfilesdir}/ceph-common.conf
-%{_mandir}/man8/ceph-authtool.8*
-%{_mandir}/man8/ceph-conf.8*
-%{_mandir}/man8/ceph-dencoder.8*
-%{_mandir}/man8/ceph-diff-sorted.8*
-%{_mandir}/man8/ceph-rbdnamer.8*
-%{_mandir}/man8/ceph-syn.8*
-%{_mandir}/man8/ceph-post-file.8*
-%{_mandir}/man8/ceph.8*
-%{_mandir}/man8/mount.ceph.8*
-%{_mandir}/man8/rados.8*
-%{_mandir}/man8/radosgw-admin.8*
-%{_mandir}/man8/rbd.8*
-%{_mandir}/man8/rbdmap.8*
-%{_mandir}/man8/rbd-replay.8*
-%{_mandir}/man8/rbd-replay-many.8*
-%{_mandir}/man8/rbd-replay-prep.8*
-%{_mandir}/man8/rgw-orphan-list.8*
 %dir %{_datadir}/ceph/
 %{_datadir}/ceph/known_hosts_drop.ceph.com
 %{_datadir}/ceph/id_rsa_drop.ceph.com
@@ -1557,7 +1533,6 @@ fi
 
 %files mds
 %{_bindir}/ceph-mds
-%{_mandir}/man8/ceph-mds.8*
 %{_unitdir}/ceph-mds@.service
 %{_unitdir}/ceph-mds.target
 %attr(750,ceph,ceph) %dir %{_localstatedir}/lib/ceph/mds
@@ -1759,7 +1734,6 @@ fi
 %files mon
 %{_bindir}/ceph-mon
 %{_bindir}/ceph-monstore-tool
-%{_mandir}/man8/ceph-mon.8*
 %{_unitdir}/ceph-mon@.service
 %{_unitdir}/ceph-mon.target
 %attr(750,ceph,ceph) %dir %{_localstatedir}/lib/ceph/mon
@@ -1807,18 +1781,15 @@ fi
 
 %files fuse
 %{_bindir}/ceph-fuse
-%{_mandir}/man8/ceph-fuse.8*
 %{_sbindir}/mount.fuse.ceph
 %{_unitdir}/ceph-fuse@.service
 %{_unitdir}/ceph-fuse.target
 
 %files -n rbd-fuse
 %{_bindir}/rbd-fuse
-%{_mandir}/man8/rbd-fuse.8*
 
 %files -n rbd-mirror
 %{_bindir}/rbd-mirror
-%{_mandir}/man8/rbd-mirror.8*
 %{_unitdir}/ceph-rbd-mirror@.service
 %{_unitdir}/ceph-rbd-mirror.target
 
@@ -1865,7 +1836,6 @@ fi
 
 %files -n rbd-nbd
 %{_bindir}/rbd-nbd
-%{_mandir}/man8/rbd-nbd.8*
 
 %files radosgw
 %{_bindir}/ceph-diff-sorted
@@ -1876,7 +1846,6 @@ fi
 %{_bindir}/rgw-gap-list
 %{_bindir}/rgw-gap-list-comparator
 %{_bindir}/rgw-orphan-list
-%{_mandir}/man8/radosgw.8*
 %dir %{_localstatedir}/lib/ceph/radosgw
 %{_unitdir}/ceph-radosgw@.service
 %{_unitdir}/ceph-radosgw.target
@@ -1931,11 +1900,6 @@ fi
 %{_libexecdir}/ceph/ceph-osd-prestart.sh
 %{_sbindir}/ceph-volume
 %{_sbindir}/ceph-volume-systemd
-%{_mandir}/man8/ceph-clsinfo.8*
-%{_mandir}/man8/ceph-osd.8*
-%{_mandir}/man8/ceph-bluestore-tool.8*
-%{_mandir}/man8/ceph-volume.8*
-%{_mandir}/man8/ceph-volume-systemd.8*
 %{_unitdir}/ceph-osd@.service
 %{_unitdir}/ceph-osd.target
 %{_unitdir}/ceph-volume@.service
@@ -2021,7 +1985,6 @@ fi
 %{_libdir}/librados_tp.so
 %endif
 %{_bindir}/librados-config
-%{_mandir}/man8/librados-config.8*
 
 %files -n libradospp-devel
 %dir %{_includedir}/rados
@@ -2180,7 +2143,6 @@ fi
 %{_bindir}/ceph-coverage
 %{_bindir}/ceph-debugpack
 %{_bindir}/cephdeduptool
-%{_mandir}/man8/ceph-debugpack.8*
 %dir %{_libdir}/ceph
 %{_libdir}/ceph/ceph-monstore-update-crush.sh
 %endif
@@ -2209,7 +2171,6 @@ fi
 %files selinux
 %attr(0600,root,root) %{_datadir}/selinux/packages/ceph.pp
 %{_datadir}/selinux/devel/include/contrib/ceph.if
-%{_mandir}/man8/ceph_selinux.8*
 
 %post selinux
 # backup file_contexts before update
