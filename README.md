@@ -1,6 +1,6 @@
 # Ceph - a scalable distributed storage system
 
-Please see http://ceph.com/ for current info.
+Please see https://docs.ceph.com/en/quincy/ for current info.
 
 
 ## Contributing Code
@@ -209,4 +209,8 @@ To build the documentation, ensure that you are in the top-level
 `/ceph` directory, and execute the build script. For example:
 
 	admin/build-doc
+
+## roadmap
+
+See [http://tracker.newdream.net/projects/ceph/roadmap](http://tracker.newdream.net/projects/ceph/roadmap)
 
