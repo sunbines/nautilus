@@ -40,3 +40,9 @@ yum install -y leveldb-devel.x86_64
 yum install -y librabbitmq-devel.x86_64
 yum install -y gperf.x86_64
 yum install -y openldap-devel
+yum install -y python-bcrypt
+yum install -y python-pecan
+yum install -y python-werkzeug 
+yum install -y jq
+yum install -y socat
+yum install -y python-cherrypy
